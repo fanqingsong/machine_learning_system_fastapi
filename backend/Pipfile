@@ -1,0 +1,17 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+django = "==2.1"
+djangorestframework = "*"
+django-rest-knox = "*"
+scikit-learn = "*"
+numpy = "*"
+uwsgi = "*"
+
+[requires]
+python_version = "3.7"
