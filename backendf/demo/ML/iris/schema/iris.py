@@ -11,13 +11,29 @@ class IrisPayload(BaseModel):
     petal_width: float
     category: str
 
+    class Config:
+        orm_mode = True
 
-def payload_to_list(hpp: IrisPayload) -> List:
-    return [
-        hpp.id,
-        hpp.sepal_len,
-        hpp.sepal_width,
-        hpp.petal_len,
-        hpp.petal_width,
-        hpp.category,
-    ]
+
+class TrainParams(BaseModel):
+    cluster_num: int
+
+
+class TrainResult(BaseModel):
+    sepal_len: float
+    sepal_width: float
+    petal_len: float
+    petal_width: float
+    cluster: int
+
+
+class PredictParams(BaseModel):
+    sepal_len: float
+    sepal_width: float
+    petal_len: float
+    petal_width: float
+
+
+class PredictResult(BaseModel):
+    cluster: int
+
