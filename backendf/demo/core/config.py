@@ -12,3 +12,5 @@ config = Config(".env")
 API_KEY: Secret = config("API_KEY", cast=Secret)
 IS_DEBUG: bool = config("IS_DEBUG", cast=bool, default=False)
 SQLALCHEMY_DATABASE_URI: str = "sqlite:///db.sqlite3"
+SQLALCHEMY_DATABASE_URI_ASYNC: str = "sqlite+aiosqlite:///db.sqlite3"
+

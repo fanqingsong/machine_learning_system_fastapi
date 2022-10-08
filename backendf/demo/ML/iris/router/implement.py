@@ -16,20 +16,11 @@ from demo.ML.iris.schema import iris as schema
 from sklearn.cluster import KMeans
 from sklearn.externals import joblib
 
-import json
-import numpy
-
-
-# from demo.package1.house_price.schema.prediction import HousePredictionResult
-#
-# from demo.package1.house_price.service import HousePriceModel
-#
-# from fastapi_hive.ioc_framework.module_container import ModuleContainer
 
 router = APIRouter()
 
 
-@router.get("/all", response_model=List[IrisPayload])
+@router.get("/all_data", response_model=List[IrisPayload], name="all iris data")
 def get_all_iris(
         request: Request,
         session: Session = Depends(get_session)
@@ -44,15 +35,7 @@ def get_all_iris(
     return contents
 
 
-@router.get("/train", response_model=List[IrisPayload])
-def get_all_iris(
-        session: Session = Depends(get_session)
-) -> List[IrisPayload]:
-    contents = session.execute(select(Iris)).scalars().all()
-    return contents
-
-
-@router.post("/train", response_model=List[schema.TrainResult])
+@router.post("/trainer", response_model=List[schema.TrainResult], name="trainer")
 def get_all_iris(
         train_params: schema.TrainParams,
         session: Session = Depends(get_session)
@@ -94,7 +77,7 @@ def get_all_iris(
     return iris_dict
 
 
-@router.post("/predict", response_model=schema.PredictResult)
+@router.post("/predictor", response_model=schema.PredictResult, name="predictor")
 def get_all_iris(
         predict_params: schema.PredictParams,
         session: Session = Depends(get_session)
