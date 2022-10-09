@@ -29,17 +29,14 @@ export class IrisExplore extends Component {
   startTrain(){
     console.log("======")
 
-    // axios.get("/api/train").then((resp)=>{
-    //   console.log("data=", resp.data);
-    // })
-
     this.props.setIrisCluster([]);
 
     let cluster_number = this.state.cluster_number;
 
-    axios.post("/api/train", {cluster_number: cluster_number}).then((resp)=>{
+    axios.post("/api/ML/iris/trainer", {cluster_number: cluster_number}).then((resp)=>{
       console.log("data=", resp.data);
-      let irisData = JSON.parse(resp.data);
+      // let irisData = JSON.parse(resp.data);
+      let irisData = resp.data;
       this.props.setIrisCluster(irisData);
     })
   }

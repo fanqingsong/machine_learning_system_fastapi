@@ -5,7 +5,7 @@ import List from "./List";
 export default function Dashboard() {
   return (
     <Fragment>
-      <Form />
+      {/* <Form /> */}
       <List />
     </Fragment>
   );

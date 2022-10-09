@@ -1,6 +1,8 @@
 
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Request
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from loguru import logger
 from demo.core.config import (APP_NAME, APP_VERSION, API_PREFIX,
                                          IS_DEBUG)
@@ -18,6 +20,19 @@ def get_app() -> FastAPI:
 
     app = FastAPI(title=APP_NAME, version=APP_VERSION, debug=IS_DEBUG)
 
+    app.mount("/static", StaticFiles(directory="../frontend/dist/static"), name="static")
+
+    templates = Jinja2Templates(directory="../frontend/dist")
+
+    @app.get("/")
+    def home(request: Request):
+        return templates.TemplateResponse(
+            "index.html",
+            {
+                "request": request
+            }
+        )
+
     ioc_framework = IoCFramework(app)
     ioc_framework.config.API_PREFIX = API_PREFIX
     ioc_framework.config.MODULE_PACKAGE_PATHS = [
@@ -32,35 +47,31 @@ def get_app() -> FastAPI:
     # ioc_framework.delete_modules_by_packages(["./demo/package1"])
     # ioc_framework.add_modules_by_packages(["./demo/package2"])
 
-    @app.get("/")
-    def get_root():
-        return "Go to docs URL to look up API: http://localhost:8000/docs"
-
     app.include_router(
-        fastapi_users.get_auth_router(auth_backend), prefix="/auth/jwt", tags=["auth"]
+        fastapi_users.get_auth_router(auth_backend), prefix="/api/auth/jwt", tags=["auth"]
     )
     app.include_router(
         fastapi_users.get_register_router(UserRead, UserCreate),
-        prefix="/auth",
+        prefix="/api/auth",
         tags=["auth"],
     )
     app.include_router(
         fastapi_users.get_reset_password_router(),
-        prefix="/auth",
+        prefix="/api/auth",
         tags=["auth"],
     )
     app.include_router(
         fastapi_users.get_verify_router(UserRead),
-        prefix="/auth",
+        prefix="/api/auth",
         tags=["auth"],
     )
     app.include_router(
         fastapi_users.get_users_router(UserRead, UserUpdate),
-        prefix="/users",
+        prefix="/api/users",
         tags=["users"],
     )
 
-    @app.get("/authenticated-route")
+    @app.get("/api/authenticated-route")
     def authenticated_route(user: User = Depends(current_user)):
         return {"message": f"Hello {user.email}!"}
 

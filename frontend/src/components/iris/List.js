@@ -41,7 +41,7 @@ export class Iris extends Component {
                 <td>{oneIris.petal_width}</td>
                 <td>{oneIris.category}</td>
                 <td>
-                <button
+                {/* <button
                     onClick={this.props.setEditedIris.bind(this, oneIris)}
                     className="btn btn-warning btn-sm"
                   >
@@ -55,7 +55,7 @@ export class Iris extends Component {
                   >
                     {" "}
                     Delete
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))}

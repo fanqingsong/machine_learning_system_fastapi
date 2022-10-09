@@ -16,7 +16,7 @@ class IrisPayload(BaseModel):
 
 
 class TrainParams(BaseModel):
-    cluster_num: int
+    cluster_number: int
 
 
 class TrainResult(BaseModel):

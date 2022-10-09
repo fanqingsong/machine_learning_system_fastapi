@@ -12,41 +12,23 @@ import {
   REGISTER_FAIL
 } from "./types";
 
-// CHECK TOKEN & LOAD USER
-export const loadUser = () => (dispatch, getState) => {
-  // User Loading
-  dispatch({ type: USER_LOADING });
-
-  axios
-    .get("/api/auth/user", tokenConfig(getState))
-    .then(res => {
-      dispatch({
-        type: USER_LOADED,
-        payload: res.data
-      });
-    })
-    .catch(err => {
-      dispatch(returnErrors(err.response.data, err.response.status));
-      dispatch({
-        type: AUTH_ERROR
-      });
-    });
-};
 
 // LOGIN USER
 export const login = (username, password) => dispatch => {
   // Headers
   const config = {
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/x-www-form-urlencoded"
     }
   };
 
-  // Request Body
-  const body = JSON.stringify({ username, password });
+
+  var formData = new FormData();
+  formData.append("username", username);
+  formData.append("password", password);
 
   axios
-    .post("/api/auth/login_extend", body, config)
+    .post("/api/auth/jwt/login", formData, config)
     .then(res => {
       dispatch({
         type: LOGIN_SUCCESS,
@@ -61,6 +43,41 @@ export const login = (username, password) => dispatch => {
     });
 };
 
+// LOGOUT USER
+export const logout = () => (dispatch, getState) => {
+  axios
+    .post("/api/auth/jwt/logout/", null, tokenConfig(getState))
+    .then(res => {
+      dispatch({
+        type: LOGOUT_SUCCESS
+      });
+    })
+    .catch(err => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
+};
+
+// CHECK TOKEN & LOAD USER
+export const loadUser = () => (dispatch, getState) => {
+  // User Loading
+  dispatch({ type: USER_LOADING });
+
+  axios
+    .get("/api/users/me", tokenConfig(getState))
+    .then(res => {
+      dispatch({
+        type: USER_LOADED,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+      dispatch({
+        type: AUTH_ERROR
+      });
+    });
+};
+
 // REGISTER USER
 export const register = ({ username, password, email }) => dispatch => {
   // Headers
@@ -71,7 +88,7 @@ export const register = ({ username, password, email }) => dispatch => {
   };
 
   // Request Body
-  const body = JSON.stringify({ username, email, password });
+  const body = JSON.stringify({ email, password });
 
   axios
     .post("/api/auth/register", body, config)
@@ -89,24 +106,10 @@ export const register = ({ username, password, email }) => dispatch => {
     });
 };
 
-// LOGOUT USER
-export const logout = () => (dispatch, getState) => {
-  axios
-    .post("/api/auth/logout/", null, tokenConfig(getState))
-    .then(res => {
-      dispatch({
-        type: LOGOUT_SUCCESS
-      });
-    })
-    .catch(err => {
-      dispatch(returnErrors(err.response.data, err.response.status));
-    });
-};
-
 // Setup config with token - helper function
 export const tokenConfig = getState => {
   // Get token from state
-  const token = getState().auth.token;
+  const access_token = getState().auth.access_token;
 
   // Headers
   const config = {
@@ -116,8 +119,8 @@ export const tokenConfig = getState => {
   };
 
   // If token, add to headers config
-  if (token) {
-    config.headers["Authorization"] = `Token ${token}`;
+  if (access_token) {
+    config.headers["Authorization"] = `bearer ${access_token}`;
   }
 
   return config;

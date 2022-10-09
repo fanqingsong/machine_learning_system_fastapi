@@ -7,7 +7,7 @@ import { GET_IRIS_DATA, DELETE_ONE_IRIS, UPDATE_ONE_IRIS, ADD_ONE_IRIS, SET_EDIT
 // GET IRIS DATA
 export const getIris = () => (dispatch, getState) => {
   axios
-    .get("/api/iris/", tokenConfig(getState))
+    .get("/api/ML/iris/all_data", tokenConfig(getState))
     .then(res => {
       dispatch({
         type: GET_IRIS_DATA,
@@ -22,7 +22,7 @@ export const getIris = () => (dispatch, getState) => {
 // DELETE one iris
 export const deleteOneIris = id => (dispatch, getState) => {
   axios
-    .delete(`/api/iris/${id}/`, tokenConfig(getState))
+    .delete(`/api/ML/iris/${id}/`, tokenConfig(getState))
     .then(res => {
       dispatch(createMessage({ deleteOneIris: "iris Deleted" }));
       dispatch({
@@ -54,7 +54,7 @@ export const setIrisCluster = irisCluster => (dispatch, getState) => {
 // UPDATE one iris
 export const updateOneIris = iris => (dispatch, getState) => {
   axios
-    .put(`/api/iris/${iris.id}/`, iris, tokenConfig(getState))
+    .put(`/api/ML/iris/${iris.id}/`, iris, tokenConfig(getState))
     .then(res => {
       dispatch(createMessage({ updateOneIris: "iris Updated" }));
       dispatch({
@@ -68,7 +68,7 @@ export const updateOneIris = iris => (dispatch, getState) => {
 // ADD one iris
 export const addOneIris = iris => (dispatch, getState) => {
   axios
-    .post("/api/iris/", iris, tokenConfig(getState))
+    .post("/api/ML/iris/", iris, tokenConfig(getState))
     .then(res => {
       console.log("add one iris success", res.data);
 

@@ -41,11 +41,12 @@ export class IrisPredict extends Component {
       petal_width
     }
 
-    axios.post("/api/predict", postData).then((resp)=>{
+    axios.post("/api/ML/iris/predictor", postData).then((resp)=>{
       console.log("data=", resp.data);
-      let irisData = JSON.parse(resp.data);
+      // let irisData = JSON.parse(resp.data);
+      let irisData = resp.data;
       
-      this.setState({predicted_cluster: irisData.predicted_cluster});
+      this.setState({predicted_cluster: irisData.cluster});
     })
   }
 

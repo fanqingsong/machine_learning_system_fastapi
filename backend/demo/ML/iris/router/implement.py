@@ -40,11 +40,11 @@ def get_all_iris(
         train_params: schema.TrainParams,
         session: Session = Depends(get_session)
 ) -> List[schema.TrainResult]:
-    cluster_num = train_params.cluster_num
+    cluster_number = train_params.cluster_number
 
-    logger.info(f"cluster number = {cluster_num}")
+    logger.info(f"cluster number = {cluster_number}")
 
-    model = KMeans(n_clusters=cluster_num)
+    model = KMeans(n_clusters=cluster_number)
 
     iris_orm = session.execute(select(Iris)).scalars().all()
     iris_pydantic = [IrisPayload.from_orm(one) for one in iris_orm]
