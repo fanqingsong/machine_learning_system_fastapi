@@ -1,7 +1,7 @@
 requests==2.22.0
 uvicorn==0.11.7
 fastapi
-fastapi-hive
+fastapi-hive==1.0.8
 numpy==1.18.1
 scikit-learn==0.22.1
 joblib==0.14.1
